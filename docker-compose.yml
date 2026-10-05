@@ -51,3 +51,15 @@ services:
     depends_on:
       - auth-service
       - parking-service
+
+  redis:
+    image: redis:7-alpine
+
+  notification-service:
+    build: ./notification-service
+    volumes:
+      - ./notification-service:/var/www
+    command: php artisan notifications:listen
+    restart: unless-stopped
+    depends_on:
+      - redis
